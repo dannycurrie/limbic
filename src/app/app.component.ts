@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +8,22 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'limbic';
 
-  host = 'http://localhost:8080/main.js';
-  
+  host = '';
+  appId = '';
+
   ngOnInit(): void {
     const script = document.createElement('script');
-    script.id = 'test';
+    script.id = this.appId;
     script.crossOrigin = '';
     script.src = this.host;
-    // append the app entry app element to this app's template
-    script.onload = () => console.log('hello!');
+    script.onload = () => {
+      const config = document[`${this.appId}Config`]();
+      const appRoot = document.createElement('div');
+      document.querySelector('.content').append(appRoot);
+      appRoot.id = config.rootElementId;
+      config.setup({ webSocket: 'hello' });
+      config.run();
+    };
     document.firstElementChild.appendChild(script);
   }
 }
