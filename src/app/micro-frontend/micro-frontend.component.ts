@@ -16,8 +16,7 @@ export class MicroFrontendComponent implements OnInit {
     script.src = this.host;
     script.onload = () => {
       const config = document[`${this.appId}Config`]();
-      config.setup({ webSocket: 'hello' });
-      config.run();
+      config.run('ws://localhost:9000');
     };
     document.firstElementChild.appendChild(script);
   }
